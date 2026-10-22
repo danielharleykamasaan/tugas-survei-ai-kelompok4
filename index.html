@@ -120,37 +120,56 @@
       color: #666666;
     }
 
-    /* FULLSCREEN OVERLAY */
-    #fullscreenOverlay {
+    /* MODAL POP-UP MEDIUM */
+    #popupModal {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #000000;
+      background-color: rgba(0, 0, 0, 0.7);
       z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
     }
 
-    #fullscreenOverlay img {
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      display: block;
+    .modal-content {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 16px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-content img {
+      width: 100%;
+      max-height: 60vh;
+      object-fit: contain;
+      border-radius: 8px;
     }
 
     .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.6);
+      background-color: #1e56a0;
       color: white;
-      border: 1px solid white;
-      padding: 8px 16px;
+      border: none;
+      padding: 10px 20px;
       font-size: 14px;
-      border-radius: 4px;
+      font-weight: bold;
+      border-radius: 6px;
       cursor: pointer;
-      z-index: 100000;
+      width: 100%;
+    }
+
+    .close-btn:hover {
+      background-color: #163172;
     }
   </style>
 </head>
@@ -162,84 +181,4 @@
 
     <form id="aiSurveyForm">
       <!-- Pertanyaan 1 -->
-      <div class="form-group">
-        <label class="question-label">1. Seberapa sering Anda menggunakan teknologi AI (misal: ChatGPT, Gemini, dll.) dalam sehari-hari?</label>
-        <div class="radio-group">
-          <label class="option"><input type="radio" name="q1" value="Sangat Sering" required> Sangat Sering (Setiap hari)</label>
-          <label class="option"><input type="radio" name="q1" value="Sering"> Sering (Beberapa kali seminggu)</label>
-          <label class="option"><input type="radio" name="q1" value="Jarang"> Jarang (Kadang-kadang saja)</label>
-          <label class="option"><input type="radio" name="q1" value="Tidak Pernah"> Tidak Pernah</label>
-        </div>
-      </div>
-
-      <!-- Pertanyaan 2 -->
-      <div class="form-group">
-        <label class="question-label" for="q2">2. Untuk tujuan apa utama Anda menggunakan AI?</label>
-        <select id="q2" name="q2" required>
-          <option value="" disabled selected>-- Pilih Tujuan --</option>
-          <option value="Membantu Tugas Sekolah / Kuliah">Membantu Tugas Sekolah / Kuliah</option>
-          <option value="Pekerjaan / Karir">Pekerjaan / Karir</option>
-          <option value="Hiburan / Pembuat Konten">Hiburan / Pembuat Konten</option>
-          <option value="Hanya Sekadar Mencoba">Hanya Sekadar Mencoba</option>
-        </select>
-      </div>
-
-      <!-- Pertanyaan 3 -->
-      <div class="form-group">
-        <label class="question-label">3. Menurut Anda, apakah hasil tanggapan/informasi dari AI dapat dipercaya?</label>
-        <div class="radio-group">
-          <label class="option"><input type="radio" name="q3" value="Sangat Percaya" required> Sangat Percaya</label>
-          <label class="option"><input type="radio" name="q3" value="Ragu-ragu"> Ragu-ragu / Perlu Diperiksa Kembali</label>
-          <label class="option"><input type="radio" name="q3" value="Tidak Percaya"> Tidak Percaya</label>
-        </div>
-      </div>
-
-      <!-- Pertanyaan 4 -->
-      <div class="form-group">
-        <label class="question-label">4. Alat/Tools AI apa saja yang pernah Anda gunakan? (Boleh pilih lebih dari satu)</label>
-        <div class="checkbox-group">
-          <label class="option"><input type="checkbox" name="q4" value="ChatGPT"> ChatGPT</label>
-          <label class="option"><input type="checkbox" name="q4" value="Google Gemini"> Google Gemini</label>
-          <label class="option"><input type="checkbox" name="q4" value="Midjourney / DALL-E"> Midjourney / DALL-E</label>
-          <label class="option"><input type="checkbox" name="q4" value="Canva AI / CapCut AI"> Canva AI / CapCut AI</label>
-        </div>
-      </div>
-
-      <!-- Pertanyaan 5 -->
-      <div class="form-group">
-        <label class="question-label" for="q5">5. Apa kekhawatiran terbesar Anda terkait perkembangan AI di masa depan?</label>
-        <textarea id="q5" name="q5" placeholder="Tuliskan pendapat Anda di sini..." required></textarea>
-      </div>
-
-      <button type="submit" class="btn-submit">Kirim Survei</button>
-    </form>
-  </div>
-
-  <footer>
-    <p>2026 Survei dari Kelompok 4 Telkom University Surabaya</p>
-  </footer>
-
-  <!-- FULLSCREEN OVERLAY (Akan muncul saat submit) -->
-  <div id="fullscreenOverlay">
-    <button class="close-btn" onclick="closeOverlay()">✕ Tutup / Mengulang</button>
-    <img src="https://i.scdn.co/image/ab67616d0000b273c189ea3132793eec3fb32d85" alt="Survei Selesai" />
-  </div>
-
-  <script>
-    const form = document.getElementById('aiSurveyForm');
-    const overlay = document.getElementById('fullscreenOverlay');
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault(); // Mencegah reload halaman
-      
-      // Tampilkan gambar full screen menutupi seluruh layar
-      overlay.style.display = 'block';
-    });
-
-    function closeOverlay() {
-      overlay.style.display = 'none';
-      form.reset(); // Mengosongkan isian form
-    }
-  </script>
-</body>
-</html>
+      <div class="
